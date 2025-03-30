@@ -1,17 +1,21 @@
-import { authConfig, loginIsRequiredServer } from "@/lib/auth";
 import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
+import PageWithNavBar from "./PageWithNavBar";
+import SecuredPage from "./SecuredPage";
 import SignOut from "./SignOut";
+import { authConfig } from "@/lib/auth";
+import { Typography } from "@mui/material";
 
 export default async function Home() {
   const session = await getServerSession(authConfig);
-  if (session === null || session === undefined) return redirect("/signin");
-  console.log(session)
   return (
-    <div>
-      <h1>Welcome, {session.user?.name}!</h1>
-      <p>Email: {session.user?.email}</p>
-      <SignOut />
-    </div >
+    <SecuredPage>
+      <PageWithNavBar path="/">
+        <Typography variant="h5">
+          Welcome, {session?.user?.name}!
+        </Typography>
+        <p>Email: {session?.user?.email}</p>
+        <SignOut />
+      </PageWithNavBar>
+    </SecuredPage>
   );
 }
