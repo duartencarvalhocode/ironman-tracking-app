@@ -25,7 +25,7 @@ export default function PageWithNavBar({ path, children }: PageWithNavBarProps) 
                 </LocalizationProvider>
             </Paper>
         </Box>
-        <BottomNavigation sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} value={path}>
+        <BottomNavigation sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, overflow: 'none' }} value={path}>
             <BottomNavigationAction
                 label="Feed"
                 value="/"

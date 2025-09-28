@@ -2,9 +2,10 @@ import { getServerSession } from "next-auth/next";
 import { authConfig } from "@/lib/auth";
 import { QueryResult } from "pg";
 import pool from "../../db/db";
-import { ActivityType, Workout } from "@/app/shared/domain/workout";
+import { activityTypeConverter, Workout } from "@/app/shared/domain/workout";
 import dayjs from "dayjs";
 import { secondsToDayJs } from "@/app/shared/utils/TimeUtils";
+
 
 export interface GetUserWorkoutsActionState {
     success: boolean
@@ -28,7 +29,7 @@ export default async function getUserWorkouts(id: number): Promise<GetUserWorkou
         const existingWorkout = workoutAcc.find((workout) => workout.id === workoutRow.id)
         if (existingWorkout) {
             const workoutActivity = {
-                activityType: workoutRow.type as ActivityType,
+                activityType: activityTypeConverter(workoutRow.type),
                 distance: workoutRow.distance,
                 duration: secondsToDayJs(workoutRow.duration),
             }
@@ -44,7 +45,7 @@ export default async function getUserWorkouts(id: number): Promise<GetUserWorkou
                 description: workoutRow.description || "",
                 date: dayjs(workoutRow.date),
                 workouts: [{
-                    activityType: workoutRow.type as ActivityType,
+                    activityType: activityTypeConverter(workoutRow.type),
                     distance: workoutRow.distance,
                     duration: secondsToDayJs(workoutRow.duration),
                 }]
@@ -67,11 +68,10 @@ type WorkoutRow = {
     type: string
     distance: number
     duration: number
-    workout_id: string
 }
 
 const GET_USER_WORKOUTS_QUERY = `
-SELECT W.*, WA.*
+SELECT W.id, W.name, W.description, W.date, W.user_id, WA.type, WA.distance, WA.duration
 FROM triathlon.WORKOUT W
 INNER JOIN triathlon.WORKOUT_ACTIVITY WA ON W.id = WA.workout_id
 WHERE W.user_id = $1

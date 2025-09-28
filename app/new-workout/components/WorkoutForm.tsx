@@ -1,37 +1,40 @@
 "use client"
 
-import { Avatar, Button, Card, FormControl, IconButton, InputAdornment, InputLabel, NativeSelect, Stack, Typography } from "@mui/material"
+import { Avatar, Button, Card, FormControl, IconButton, InputAdornment, InputLabel, NativeSelect, Stack, SvgIconTypeMap, Typography } from "@mui/material"
 import TextField from "@mui/material/TextField"
 import dayjs from "dayjs"
 import { Control, Controller, FieldArrayWithId, useFieldArray, UseFieldArrayRemove, useForm, UseFormRegister, useWatch } from "react-hook-form"
 import { DateTimePicker, MobileTimePicker } from "@mui/x-date-pickers";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useActionState, useEffect, useState } from "react"
-import PoolIcon from '@mui/icons-material/Pool';
-import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
-import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
 import { createWorkout, CreateWorkoutActionState } from "@/app/actions/workout/create"
 import { dayjsToSeconds, getFormattedPace } from "@/app/shared/utils/TimeUtils"
 import { useRouter } from "next/navigation"
 import { ActivityType, WorkoutFormInput } from "@/app/shared/domain/workout"
+import { ActivityRenderProps } from "@/app/your-activities/page"
+import PoolIcon from '@mui/icons-material/Pool';
+import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
+import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
 
-export const ACTIVITY_RENDER_PROPS = {
+const ACTIVITY_RENDER_PROPS: Record<ActivityType, ActivityRenderProps> = {
     [ActivityType.Swim]: {
         icon: <PoolIcon />,
-        color: 'primary',
+        color: 'blue',
         header: 'swim'
     },
     [ActivityType.Run]: {
         icon: <DirectionsRunIcon />,
-        color: 'primary',
+        color: 'green',
         header: 'run'
     },
     [ActivityType.Cycle]: {
         icon: <DirectionsBikeIcon />,
-        color: 'primary',
+        color: 'orange',
         header: 'cycle'
     },
 }
+
+
 
 export default function WorkoutForm() {
     const router = useRouter()
@@ -215,7 +218,7 @@ function FocusedActivity({ index, control, register, field, remove }: FocusedAct
             InputProps={{
                 endAdornment: <InputAdornment position="end">Km</InputAdornment>,
             }}
-            {...register(`workouts.${index}.distance`, { required: true, min: 0, max: 1000, })}
+            {...register(`workouts.${index}.distance`, { required: true, min: 0, max: 1000 })}
         />
         <IconButton
             color="error"

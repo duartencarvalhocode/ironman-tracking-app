@@ -7,7 +7,8 @@ import pool from "../../db/db";
 import { v4 as uuidv4 } from 'uuid'
 import { z } from 'zod';
 import { dayjsToSeconds } from "../../shared/utils/TimeUtils";
-import { WorkoutFormInput } from "../../new-workout/components/WorkoutForm";
+import { WorkoutFormInput } from "@/app/shared/domain/workout";
+
 
 const workoutSchema = z.object({
     title: z.string().min(3, "Workout title is required"),

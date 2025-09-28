@@ -26,3 +26,17 @@ export interface WorkoutFormInput {
     readonly date: Dayjs
     readonly workouts: WorkoutActivity[]
 }
+
+
+export function activityTypeConverter(activityType: string): ActivityType {
+    switch (activityType) {
+        case 'Run':
+            return ActivityType.Run
+        case 'Cycle':
+            return ActivityType.Cycle
+        case 'Swim':
+            return ActivityType.Swim
+        default:
+            throw Error(`Invalid argument ${activityType}`)
+    }
+}
